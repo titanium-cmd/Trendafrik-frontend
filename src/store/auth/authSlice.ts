@@ -15,8 +15,8 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload.agent;
-      localStorage.setItem(USER_INFO_KEY, JSON.stringify(action.payload?.agent));
+      state.user = action.payload.user;
+      localStorage.setItem(USER_INFO_KEY, JSON.stringify(action.payload?.user));
       localStorage.setItem(USER_TOKEN_KEY, action.payload?.token);
     },
     getUser: (state) => {

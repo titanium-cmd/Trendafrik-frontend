@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { reducer as notificationsReducer } from 'reapop'
+import authSlice from './auth/authSlice'
+import quizSlice from './quiz/quizSlice'
 
 export const store = configureStore({
   reducer: {
-    notifications: notificationsReducer()
+    notifications: notificationsReducer(),
+    auth: authSlice,
+    quiz: quizSlice
   },
 })
 

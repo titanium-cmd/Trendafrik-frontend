@@ -1,4 +1,8 @@
+import { USER_INFO_KEY } from "src/constants";
 import { BaseState } from "src/models/store";
+import { User } from "src/models/user";
+
+export const getUser = () => JSON.parse(localStorage.getItem(USER_INFO_KEY)!) as User;
 
 export const asyncIsPending = (state: BaseState) => {
   state.status = 'pending';
