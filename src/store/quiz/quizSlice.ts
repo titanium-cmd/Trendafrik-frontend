@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Question } from 'src/models/quiz';
 import { QuizState } from 'src/models/store';
 import { asyncIsPending, asyncIsRejected } from '../asyncConfig';
 import { getAllQuestions, getAllResults, saveQuizResult } from './quizService';
@@ -24,8 +25,11 @@ export const quizSlice = createSlice({
     builder.addCase(getAllQuestions.pending, asyncIsPending)
     builder.addCase(getAllQuestions.rejected, asyncIsRejected)
     builder.addCase(getAllQuestions.fulfilled, (state, action) => {
-      state.status = 'fulfilled';
-      state.questions = action.payload.questions;
+      state.status = null;
+      state.questions = action.payload.questions.map((question: Question) => ({
+        ...question,
+        selected_answer: '',
+      }));
     })
     builder.addCase(getAllResults.pending, asyncIsPending)
     builder.addCase(getAllResults.rejected, asyncIsRejected)
@@ -37,7 +41,7 @@ export const quizSlice = createSlice({
     builder.addCase(saveQuizResult.fulfilled, (state, action) => {
       state.status = 'fulfilled';
       state.message = action.payload.message;
-      state.mark = action.payload.mark;
+      state.mark = action.payload.score;
     })
     builder.addCase(saveQuizResult.rejected, asyncIsRejected)
   }

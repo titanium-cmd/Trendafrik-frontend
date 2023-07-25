@@ -1,10 +1,10 @@
 import { TimeStamp } from "./common";
 
 export interface Question extends TimeStamp {
-  questionTitle: string,
-  correctAnswer: string,
-  selectedAnswer: string,
-  possibleAnswers: string[],
+  question_title: string,
+  correct_answer: string,
+  selected_answer: string,
+  possible_answers: string[],
 }
 
 export interface QuizResults extends TimeStamp {

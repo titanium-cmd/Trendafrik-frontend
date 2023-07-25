@@ -7,7 +7,7 @@ export const saveQuizResult = createAsyncThunk(
   'quiz/saveQuizResult',
   async (result: QuizResults, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const { data } = await axios.post('/quiz/results', result);
+      const { data } = await axios.post('/quizzes', result);
       return fulfillWithValue(data);
     } catch (err) {
       const error = err as AxiosError;
@@ -20,7 +20,7 @@ export const getAllQuestions = createAsyncThunk(
   'quiz/getQuestions',
   async (_, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const { data } = await axios.get('/quiz/questions');
+      const { data } = await axios.get('/quizzes');
       return fulfillWithValue(data);
     } catch (err) {
       const error = err as AxiosError;
@@ -33,7 +33,7 @@ export const getAllResults = createAsyncThunk(
   'quiz/getAllResults',
   async (_, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const { data } = await axios.get('/quiz/questions');
+      const { data } = await axios.get('/quizzes/results');
       return fulfillWithValue(data);
     } catch (err) {
       const error = err as AxiosError;

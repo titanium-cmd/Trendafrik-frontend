@@ -1,92 +1,127 @@
-import { Box, Button, Grid, Paper, RadioGroup, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Paper, RadioGroup, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { notify } from 'reapop';
+import CustomDialog from 'src/components/CustomDialog';
 import OptionBox from 'src/components/OptionBox';
 import QuestionBar from 'src/components/QuestionBar';
 import { useAppDispatch, useAppSelector } from 'src/hooks/redux';
 import { Question, QuizResults } from 'src/models/quiz';
-import { saveQuizResult } from 'src/store/quiz/quizService';
+import { getAllQuestions, saveQuizResult } from 'src/store/quiz/quizService';
 import { clearQuizState } from 'src/store/quiz/quizSlice';
 
 const NewQuestions: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { status, message } = useAppSelector((state) => state.quiz)
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const { status, message, questions, mark } = useAppSelector((state) => state.quiz)
+  const [systemQuestions, setSystemQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAllQuestions());
+  }, []);
+
+  useEffect(() => {
+    if (questions && questions.length > 0) {
+      setSystemQuestions([...questions]);
+    }
+  }, [questions]);
 
   useEffect(() => {
     if (status === 'rejected') {
       dispatch(notify(message, 'error'))
     } else if (status === 'fulfilled') {
       dispatch(notify(message, 'success'))
+      setShowSuccessDialog(true);
       dispatch(clearQuizState());
-      setTimeout(() => {
-        navigate('/')
-      }, 300);
     }
     // eslint-disable-next-line
   }, [status])
 
   return (
-    <Grid display={'flex'} px={10} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} height={'100vh'} width={'100%'}>
-      <Paper elevation={3} style={{ width: '50%', padding: '40px' }}>
-        <Box width={'100%'} height={'30px'} display={'flex'} justifyContent={'space-between'}>
-          {questions.map((_, index) =>
-            <QuestionBar isActive={index === currentQuestionIndex} />
-          )}
-        </Box>
-        <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-          {questions.map((question, index) =>
-            (index === currentQuestionIndex) ? <>
-              <br />
-              <br />
-              <Typography align='center' fontWeight={'600'} color={'primary'}>
-                Question {index + 1}/{questions.length}
-              </Typography>
-              <Typography textAlign={'center'} variant='h1'>{question.questionTitle}</Typography>
-              <br />
-              <br />
-              <RadioGroup
-                name="options"
-                value={question.selectedAnswer}
-                onChange={(e) => {
-                  const newQuestions = [...questions];
-                  newQuestions[index].selectedAnswer = e.target.value;
-                  setQuestions(newQuestions);
-                }}
-              >
-                {question.possibleAnswers.map(opt => <OptionBox value={opt} />)}
-              </RadioGroup>
-            </> : <></>
-          )}
-        </Box>
-        <Box display={'flex'} width={'100%'} justifyContent={'space-between'} alignItems={'center'}>
-          <Button
-            disabled={currentQuestionIndex === 0 || status === 'pending'}
-            onClick={() => {
-              if (currentQuestionIndex > 0) {
-                setCurrentQuestionIndex((preValue) => preValue - 1);
-              } else {
-                const result = { questions } as QuizResults;
-                dispatch(saveQuizResult(result));
-              }
-            }}>
-            Previous
-          </Button>
-          <Button
-            disabled={(currentQuestionIndex >= questions.length - 1) || status === 'pending'}
-            onClick={() => {
-              if (currentQuestionIndex <= questions.length) {
-                setCurrentQuestionIndex((preValue) => preValue + 1);
-              }
-            }}>
-            Next
-          </Button>
-        </Box>
-      </Paper>
-    </Grid>
+    <>
+      <CustomDialog
+        open={showSuccessDialog}
+        body={<>
+          <Typography>Quiz has been submitted. Your score is {mark}.</Typography>
+        </>}
+        onProceed={() => navigate('/')}
+        onClose={() => setShowSuccessDialog(false)}
+      />
+      <Grid display={'flex'} px={10} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} height={'100vh'} width={'100%'}>
+        <Paper elevation={3} style={{ width: '50%', padding: '40px' }}>
+          {status === 'pending' ? <Grid container justifyContent="center" alignItems="center">
+            <Grid item>
+              <CircularProgress size={64} disableShrink thickness={3} />
+            </Grid>
+          </Grid> :
+            <>
+              <Box width={'100%'} height={'30px'} display={'flex'} justifyContent={'space-between'}>
+                {systemQuestions.map((_, index) =>
+                  <QuestionBar isActive={index === currentQuestionIndex} />
+                )}
+              </Box>
+              <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
+                {systemQuestions.map((question, index) =>
+                  (index === currentQuestionIndex) ? <>
+                    <br />
+                    <br />
+                    <Typography align='center' fontWeight={'600'} color={'primary'}>
+                      Question {index + 1}/{systemQuestions.length}
+                    </Typography>
+                    <Typography textAlign={'center'} variant='h1'>{question.question_title}</Typography>
+                    <br />
+                    <br />
+                    <RadioGroup
+                      name="options"
+                      value={question.selected_answer}
+                      onChange={(e) => {
+                        const updatedQuestions = systemQuestions.map((question, i) => {
+                          if (i === index) {
+                            return { ...question, selected_answer: e.target.value };
+                          }
+                          return question;
+                        });
+                        setSystemQuestions(updatedQuestions);
+                      }}
+                    >
+                      {question.possible_answers.map(opt => <OptionBox value={opt} />)}
+                    </RadioGroup>
+                  </> : <></>
+                )}
+              </Box>
+              <Box display={'flex'} width={'100%'} justifyContent={'space-between'} alignItems={'center'}>
+                <Button
+                  disabled={currentQuestionIndex === 0}
+                  onClick={() => {
+                    if (currentQuestionIndex > 0) {
+                      setCurrentQuestionIndex((preValue) => preValue - 1);
+                    }
+                  }}>
+                  Previous
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (currentQuestionIndex < systemQuestions.length - 1) {
+                      setCurrentQuestionIndex((preValue) => preValue + 1);
+                    } else {
+                      const unAnswered = systemQuestions.filter(question => question.selected_answer === '')[0];
+                      if (unAnswered) {
+                        return dispatch(notify('Please make sure all questions are answered', 'error'));
+                      }
+                      const result = { questions: systemQuestions } as QuizResults;
+                      dispatch(saveQuizResult(result));
+                    }
+                  }}>
+                  {currentQuestionIndex == systemQuestions.length - 1 ? 'Submit' : 'Next'}
+                </Button>
+              </Box>
+            </>
+          }
+        </Paper>
+      </Grid>
+    </>
   )
 }
 
