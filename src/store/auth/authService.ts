@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { User, UserCredentials } from "src/models/user";
 import axios from '../axios';
-import { setUser } from "./authSlice";
+import { clearUser, setUser } from "./authSlice";
 
 export const createUserAccount = createAsyncThunk(
   'auth/createAccount',
@@ -62,9 +62,10 @@ export const userLogin = createAsyncThunk(
 
 export const userLogout = createAsyncThunk(
   'auth/logout',
-  async (_, { fulfillWithValue, rejectWithValue }) => {
+  async (_, { fulfillWithValue, rejectWithValue, dispatch }) => {
     try {
-
+      dispatch(clearUser())
+      return fulfillWithValue({ success: true, message: 'Logged out successful' });
     } catch (err) {
       const error = err as AxiosError;
       return rejectWithValue(error.response?.data);
