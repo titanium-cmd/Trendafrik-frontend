@@ -6,8 +6,8 @@ import { notify } from 'reapop';
 import { useAppDispatch, useAppSelector } from 'src/hooks/redux';
 import { User } from 'src/models/user';
 import { createUserAccount } from 'src/store/auth/authService';
-import CreateAccountForm from './CreateAccountForm';
 import { clearAuthState } from 'src/store/auth/authSlice';
+import CreateAccountForm from './CreateAccountForm';
 
 const CreateAccountPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const CreateAccountPage: React.FC = () => {
     email_address: '',
     password: '',
     confirm_password: '',
-    fullname: ''
+    username: ''
   })
 
   useEffect(() => {
@@ -35,7 +35,14 @@ const CreateAccountPage: React.FC = () => {
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const { password, confirm_password } = userInfo;
+    const { password, confirm_password, username, email_address } = userInfo;
+    if (
+      username.trim().length === 0
+      && email_address.trim().length === 0
+      && password.trim().length === 0
+    ) {
+      return dispatch(notify('All fields are required', 'error'))
+    }
     if (password !== confirm_password) {
       return dispatch(notify('Passwords should match', 'error'))
     }

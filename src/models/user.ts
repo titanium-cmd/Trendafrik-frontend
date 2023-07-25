@@ -8,5 +8,5 @@ export interface UserCredentials {
 
 export interface User extends UserCredentials, TimeStamp {
   id?: string
-  fullname: string,
+  username: string,
 }

@@ -17,6 +17,5 @@ export const asyncIsRejected = (state: BaseState, action: any) => {
 export const asyncIsFulfilled = (state: BaseState, action: any) => {
   console.log('FULFILLED:: ', action.payload?.message);
   state.status = 'fulfilled';
-  state.stage = action.payload?.stage;
   state.message = action.payload?.message;
 }

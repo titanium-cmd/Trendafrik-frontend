@@ -6,7 +6,8 @@ import NotFoundPage from './pages/404/NotFoundPage';
 import Auth from './pages/auth/Auth';
 import CreateAccountPage from './pages/auth/create_account/CreateAccountPage';
 import LoginPage from './pages/auth/login/LoginPage';
-import Dashboard from './pages/dashboard/Dashboard';
+import Dashboard from './pages/main/Dashboard';
+import NewQuestions from './pages/main/NewQuestions';
 import { setupAxiosResponseInterceptors } from './store/axios';
 import ThemeProvider from './theme/ThemeProvider';
 
@@ -33,9 +34,8 @@ const App: React.FC = () => {
       theme={wyboTheme}
     />
     <Routes>
-      <Route path='/' element={<Dashboard />}>
-        {/* <Route path='tasks' element={<TasksPage />} /> */}
-      </Route>
+      <Route path='/' element={<Dashboard />} />
+      <Route path='new' element={<NewQuestions />} />
       <Route path='/auth' element={<Auth />} >
         <Route path='login' element={<LoginPage />} />
         <Route path='create-account' element={<CreateAccountPage />} />

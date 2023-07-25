@@ -9,7 +9,6 @@ import { clearUser } from "./auth/authSlice";
 axios.interceptors.request.use(function (config) {
   const token = localStorage.getItem(USER_TOKEN_KEY);
   config.baseURL = process.env.REACT_APP_WEB_SERVICE_BASE_URL
-  // config.baseURL = "https://dapscnect-webservice.onrender.com/api/v1";
   config.headers['Accept'] = '*/*';
   config.headers['Authorization'] = `Bearer ${token}`
   config.headers['Access-Control-Allow-Origin'] = '*'

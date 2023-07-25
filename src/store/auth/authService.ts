@@ -6,10 +6,9 @@ import { setUser } from "./authSlice";
 
 export const createUserAccount = createAsyncThunk(
   'auth/createAccount',
-  async (details: User, { fulfillWithValue, rejectWithValue, dispatch }) => {
+  async (details: User, { fulfillWithValue, rejectWithValue }) => {
     try {
       const { data } = await axios.post('/users', details);
-      dispatch(setUser(data.data));
       return fulfillWithValue(data);
     } catch (err) {
       const error = err as AxiosError;
@@ -49,10 +48,11 @@ export const userPasswordReset = createAsyncThunk(
 
 export const userLogin = createAsyncThunk(
   'auth/login',
-  async (credentials: UserCredentials, { fulfillWithValue, rejectWithValue }) => {
+  async (credentials: UserCredentials, { fulfillWithValue, rejectWithValue, dispatch }) => {
     try {
       const { data } = await axios.post('/users/login', credentials);
-      return fulfillWithValue({ ...data, stage: 'login' });
+      dispatch(setUser(data));
+      return fulfillWithValue(data);
     } catch (err) {
       const error = err as AxiosError;
       return rejectWithValue(error.response?.data);

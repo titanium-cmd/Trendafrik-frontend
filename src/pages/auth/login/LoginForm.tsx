@@ -82,12 +82,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, credentials, onChange, 
             variant="contained"
             sx={{ p: 1.3 }}
           >
-            Sign In
+            LOGIN
           </LoadingButton>
         </Box>
         <Typography color={'GrayText'} align='center' mt={2}>
           Don't have an account?
-          <Link ml={0.5} href="/create-account" fontWeight={600} underline="none" variant="body2">
+          <Link ml={0.5} href="/auth/create-account" fontWeight={600} underline="none" variant="body2">
             Register
           </Link>
         </Typography>

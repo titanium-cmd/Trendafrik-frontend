@@ -1,9 +1,9 @@
-import { LoadingButton } from '@mui/lab'
-import { Box, FormControlLabel, Grid, Link, TextField, Typography } from '@mui/material'
-import React, { FormEvent } from 'react'
-import { AsyncState } from 'src/models/store'
+import { LoadingButton } from '@mui/lab';
+import { Box, Link, TextField, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { User } from 'src/models/user'
+import React, { FormEvent } from 'react';
+import { AsyncState } from 'src/models/store';
+import { User } from 'src/models/user';
 
 interface CreateAccountFormProps {
   info: User,
@@ -32,10 +32,20 @@ const CreateAccountForm: React.FC<CreateAccountFormProps> = ({ onChange, info, o
         <br />
         <br />
         <br />
-        <Typography color={''} component="h1" variant="h1">
-          Get Started, Create Account
+        <Typography component="h1" variant="h1">
+          Create Account
         </Typography>
         <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 2 }}>
+          <TextField
+            margin="normal"
+            required
+            value={info.username}
+            fullWidth
+            name='username'
+            onChange={onChange}
+            label="Full Name"
+            autoFocus
+          />
           <TextField
             margin="normal"
             required
@@ -55,7 +65,7 @@ const CreateAccountForm: React.FC<CreateAccountFormProps> = ({ onChange, info, o
             name="password"
             label="Password"
             type="password"
-          />          
+          />
           <TextField
             margin="normal"
             required
@@ -65,21 +75,22 @@ const CreateAccountForm: React.FC<CreateAccountFormProps> = ({ onChange, info, o
             name="confirm_password"
             label="Confirm Password"
             type="password"
-          />          
+          />
           <LoadingButton
             type="submit"
             fullWidth
             loading={status === 'pending'}
             loadingPosition="start"
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, p: 1.3 }}
           >
-            Sign Up
+            CREATE ACCOUNT
           </LoadingButton>
         </Box>
-        <Typography align='center'>
-          <Link href="/create-account" fontWeight={600} underline="none" variant="body2">
-            {"Don't have an account? Sign Up"}
+        <Typography color={'GrayText'} align='center' mt={1}>
+          Already have account?
+          <Link ml={0.5} href="/auth/login" fontWeight={600} underline="none" variant="body2">
+            login
           </Link>
         </Typography>
       </Box>

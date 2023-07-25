@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { NotificationsProvider } from 'reapop';
 import App from './App';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store';
 

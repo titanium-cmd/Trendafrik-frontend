@@ -36,17 +36,13 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(createUserAccount.pending, asyncIsPending)
     builder.addCase(createUserAccount.rejected, asyncIsRejected)
-    builder.addCase(createUserAccount.fulfilled, (state, action) => {
-      state.status = 'fulfilled';
-      state.message = action.payload.message;
-      state.user = action.payload.agent;
-    })
+    builder.addCase(createUserAccount.fulfilled, asyncIsFulfilled)
     builder.addCase(updateUserAccount.pending, asyncIsPending)
     builder.addCase(updateUserAccount.rejected, asyncIsRejected)
     builder.addCase(updateUserAccount.fulfilled, (state, action) => {
       state.status = 'fulfilled';
       state.message = action.payload.message;
-      state.user = action.payload.agent;
+      state.user = action.payload.user;
     })
     builder.addCase(userPasswordReset.pending, asyncIsPending)
     builder.addCase(userPasswordReset.fulfilled, asyncIsFulfilled)
