@@ -53,7 +53,7 @@ const CustomizedTable: React.FC<CustomizedTableProps> = ({ data, tableCells }) =
           {data.map((row) => (
             <StyledTableRow key={row.name}>
               {tableCells.map(cell =>
-                <StyledTableCell key={cell.key} align="right">{row[cell.key]}</StyledTableCell>
+                <StyledTableCell key={cell.key}>{row[cell.key]}</StyledTableCell>
               )}
             </StyledTableRow>
           ))}

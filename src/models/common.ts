@@ -1,4 +1,4 @@
-export interface TimeStamp{
-  createdAt?: Date,
-  updatedAt?: Date
+export interface TimeStamp {
+  createdAt?: string | Date,
+  updatedAt?: string | Date
 }

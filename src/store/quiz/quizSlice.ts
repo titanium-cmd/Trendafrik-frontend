@@ -34,7 +34,7 @@ export const quizSlice = createSlice({
     builder.addCase(getAllResults.pending, asyncIsPending)
     builder.addCase(getAllResults.rejected, asyncIsRejected)
     builder.addCase(getAllResults.fulfilled, (state, action) => {
-      state.status = 'fulfilled';
+      state.status = null;
       state.results = action.payload.results;
     })
     builder.addCase(saveQuizResult.pending, asyncIsPending)

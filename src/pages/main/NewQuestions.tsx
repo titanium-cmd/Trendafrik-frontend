@@ -20,6 +20,7 @@ const NewQuestions: React.FC = () => {
 
   useEffect(() => {
     dispatch(getAllQuestions());
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -114,7 +115,7 @@ const NewQuestions: React.FC = () => {
                       dispatch(saveQuizResult(result));
                     }
                   }}>
-                  {currentQuestionIndex == systemQuestions.length - 1 ? 'Submit' : 'Next'}
+                  {currentQuestionIndex === systemQuestions.length - 1 ? 'Submit' : 'Next'}
                 </Button>
               </Box>
             </>

@@ -1,15 +1,31 @@
 import NewQuizIcon from '@mui/icons-material/Quiz'
-import { Button, Grid, Paper } from '@mui/material'
-import { useEffect } from 'react'
+import { Button, CircularProgress, Grid, Paper } from '@mui/material'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import CustomizedTable from 'src/components/Table'
-import { useAppSelector } from 'src/hooks/redux'
+import { useAppDispatch, useAppSelector } from 'src/hooks/redux'
+import { QuizResults } from 'src/models/quiz'
 import { getUser } from 'src/store/asyncConfig'
+import { getAllResults } from 'src/store/quiz/quizService'
 
 const Dashboard: React.FC = () => {
   const location = useLocation();
   const navigator = useNavigate();
+  const dispatch = useAppDispatch();
+  const [userQuizResults, setUserQuizResults] = useState<QuizResults[]>([])
   const { user } = useAppSelector((state) => state.auth);
+  const { results, status} = useAppSelector((state) => state.quiz);
+
+  useEffect(() => {
+    dispatch(getAllResults());
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    const _results = results.map((result) => ({ ...result, createdAt: moment(result.createdAt).format('LLL') }) as QuizResults);
+    setUserQuizResults(_results)
+  }, [results]);
 
   useEffect(() => {
     const user = getUser();
@@ -43,13 +59,17 @@ const Dashboard: React.FC = () => {
           >
             {('Try New Quiz')}
           </Button>
-          <CustomizedTable
+          {status === 'pending' ? <Grid container justifyContent="center" alignItems="center">
+            <Grid item>
+              <CircularProgress size={64} disableShrink thickness={3} />
+            </Grid>
+          </Grid> : <CustomizedTable
             tableCells={[
-              { key: "mark", label: 'Mark Scored' },
-              { key: "mark", label: 'Answered On' },
+              { key: "score", label: 'Mark Scored' },
+              { key: "createdAt", label: 'Date Taken' },
             ]}
-            data={[]}
-          />
+            data={userQuizResults}
+          />}
         </Paper>
       </Grid>
     </Grid>

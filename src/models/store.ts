@@ -15,6 +15,6 @@ export interface AuthState extends BaseState {
 
 export interface QuizState extends BaseState {
   questions: Question[] | [],
-  results: QuizResults | [],
+  results: QuizResults[],
   mark: number
 }
