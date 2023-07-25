@@ -43,5 +43,5 @@ export const quizSlice = createSlice({
   }
 });
 
-export const { } = quizSlice.actions;
+export const { clearQuizState } = quizSlice.actions;
 export default quizSlice.reducer;

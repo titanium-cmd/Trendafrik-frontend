@@ -1,43 +1,33 @@
 import { Box, Button, Grid, Paper, RadioGroup, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { notify } from 'reapop';
 import OptionBox from 'src/components/OptionBox';
 import QuestionBar from 'src/components/QuestionBar';
-import { Question } from 'src/models/quiz';
+import { useAppDispatch, useAppSelector } from 'src/hooks/redux';
+import { Question, QuizResults } from 'src/models/quiz';
+import { saveQuizResult } from 'src/store/quiz/quizService';
+import { clearQuizState } from 'src/store/quiz/quizSlice';
 
 const NewQuestions: React.FC = () => {
-  const [questions, setQuestions] = useState<Question[]>([
-    {
-      questionTitle: 'How is the color of the book', correctAnswer: 'Red', selectedAnswer: '', possibleAnswers: ['Red', 'Blue', 'Green']
-    },
-    {
-      questionTitle: 'Why are you so annoying', correctAnswer: 'Nothing', selectedAnswer: '', possibleAnswers: ['Nothing', 'No reason', 'Eat']
-    },
-    {
-      questionTitle: 'What makes you happy?', correctAnswer: 'Food', selectedAnswer: '', possibleAnswers: ['Food', 'Showing love', 'Being good']
-    },
-    {
-      questionTitle: 'How many years of experience do you have?', correctAnswer: '3', selectedAnswer: '', possibleAnswers: ['5', '20', '3']
-    },
-    {
-      questionTitle: 'How come you dont look sad nor happy?', correctAnswer: 'Am a trader', selectedAnswer: '', possibleAnswers: ['Am a trader', 'Am broken', 'Other']
-    },
-    {
-      questionTitle: 'You have to keep the faith, not just in you about everyone', correctAnswer: 'Not Easy', selectedAnswer: '', possibleAnswers: ['Not Easy', "Depends"]
-    },
-    {
-      questionTitle: 'What is your fav song and why?', correctAnswer: 'Aseda', selectedAnswer: '', possibleAnswers: ['Zongo', 'Aseda']
-    },
-    {
-      questionTitle: '____________________?', correctAnswer: '', selectedAnswer: '', possibleAnswers: ['']
-    },
-    {
-      questionTitle: '____________________?', correctAnswer: '', selectedAnswer: '', possibleAnswers: ['']
-    },
-    {
-      questionTitle: '____________________?', correctAnswer: '', selectedAnswer: '', possibleAnswers: ['']
-    }
-  ]);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { status, message } = useAppSelector((state) => state.quiz)
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  useEffect(() => {
+    if (status === 'rejected') {
+      dispatch(notify(message, 'error'))
+    } else if (status === 'fulfilled') {
+      dispatch(notify(message, 'success'))
+      dispatch(clearQuizState());
+      setTimeout(() => {
+        navigate('/')
+      }, 300);
+    }
+    // eslint-disable-next-line
+  }, [status])
 
   return (
     <Grid display={'flex'} px={10} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} height={'100vh'} width={'100%'}>
@@ -74,16 +64,19 @@ const NewQuestions: React.FC = () => {
         </Box>
         <Box display={'flex'} width={'100%'} justifyContent={'space-between'} alignItems={'center'}>
           <Button
-            disabled={currentQuestionIndex === 0}
+            disabled={currentQuestionIndex === 0 || status === 'pending'}
             onClick={() => {
               if (currentQuestionIndex > 0) {
                 setCurrentQuestionIndex((preValue) => preValue - 1);
+              } else {
+                const result = { questions } as QuizResults;
+                dispatch(saveQuizResult(result));
               }
             }}>
             Previous
           </Button>
           <Button
-            disabled={currentQuestionIndex >= questions.length - 1}
+            disabled={(currentQuestionIndex >= questions.length - 1) || status === 'pending'}
             onClick={() => {
               if (currentQuestionIndex <= questions.length) {
                 setCurrentQuestionIndex((preValue) => preValue + 1);
