@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
+// Styling the TableCell with custom styles
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -18,6 +19,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+// Styling the TableRow with custom styles
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
@@ -28,16 +30,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+// CustomizedTableCell: Interface for defining table cell data
 interface CustomizedTableCell {
-  key: string,
-  label: string
+  key: string;
+  label: string;
 }
 
+// CustomizedTableProps: Props for the CustomizedTable component
 interface CustomizedTableProps {
-  data: any[],
-  tableCells: CustomizedTableCell[]
+  data: any[];
+  tableCells: CustomizedTableCell[];
 }
 
+// CustomizedTable: Custom table component with custom styling for TableCells and TableRows
 const CustomizedTable: React.FC<CustomizedTableProps> = ({ data, tableCells }) => {
   return (
     <TableContainer component={Paper}>

@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 
+// Props for the QuestionBar component
 interface QuestionBarProps {
   isActive: boolean
 }

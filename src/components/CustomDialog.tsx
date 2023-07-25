@@ -8,6 +8,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import React from 'react';
 import { createPortal } from 'react-dom';
 
+// Slide transition for the Dialog
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -17,26 +18,28 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+// Props for the CustomDialog component
 interface CustomDialogProps {
   title?: string;
   open: boolean;
-  body: React.ReactNode,
-  onClose: () => void,
-  onProceed?: () => void
+  body: React.ReactNode;
+  onClose: () => void;
+  onProceed?: () => void;
 }
 
+// CustomDialog component to display dialogs in the application.
 const CustomDialog: React.FC<CustomDialogProps> = ({ title, open, onClose, onProceed, body }) => {
+  // Render the Dialog component as a portal into the document body
   return (
-    createPortal
-      (<Dialog
+    createPortal(
+      <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
         onClose={onClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        {title && <DialogTitle>{title}</DialogTitle>
-        }
+        {title && <DialogTitle>{title}</DialogTitle>}
         <DialogContent>
           {body}
         </DialogContent>
@@ -44,7 +47,9 @@ const CustomDialog: React.FC<CustomDialogProps> = ({ title, open, onClose, onPro
           <Button color='error' onClick={onClose}>Close</Button>
           {onProceed && <Button onClick={onProceed}>Proceed</Button>}
         </DialogActions>
-      </Dialog >, document.body)
+      </Dialog>,
+      document.body
+    )
   );
 }
 

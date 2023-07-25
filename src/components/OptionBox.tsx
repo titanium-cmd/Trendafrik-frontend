@@ -1,6 +1,7 @@
 import { Box, FormControlLabel, Radio } from '@mui/material'
 import React from 'react'
 
+// Props for the OptionBox component
 interface OptionBoxProp {
   value: string,
 }

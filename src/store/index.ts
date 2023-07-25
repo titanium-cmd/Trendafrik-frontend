@@ -3,6 +3,7 @@ import { reducer as notificationsReducer } from 'reapop'
 import authSlice from './auth/authSlice'
 import quizSlice from './quiz/quizSlice'
 
+//configuring store to be used throughout the application.
 export const store = configureStore({
   reducer: {
     notifications: notificationsReducer(),

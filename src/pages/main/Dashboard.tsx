@@ -43,7 +43,10 @@ const Dashboard: React.FC = () => {
 
   return (
     <Grid container xs={12} bgcolor={'InfoBackground'} height={'100vh'} width={'100%'}>
-      <Grid item xs={12} p={10}>
+      <Grid>
+
+      </Grid>
+      <Grid item display={'flex'} justifyContent={'center'} alignContent={'center'} xs={12} sx={{ p: { xs: 3, sm: 8, md: 8, lg: 10 } }}>
         <Paper
           elevation={3}
           style={{ padding: 15, width: '100%' }}
