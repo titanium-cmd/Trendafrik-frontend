@@ -1,4 +1,6 @@
 import { Box, Button, CircularProgress, Grid, Paper, RadioGroup, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { notify } from 'reapop';
@@ -17,6 +19,23 @@ const NewQuestions: React.FC = () => {
   const [systemQuestions, setSystemQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+
+  const paperWidth = isSmallScreen
+    ? '100%' // Width for small screens
+    : isMediumScreen
+      ? '80%' // Width for medium screens
+      : '80%'; // Default width for larger screens
+
+  const styles = {
+    paper: {
+      width: paperWidth,
+      padding: 20,
+      margin: '0 auto', // Centers the paper horizontally
+    },
+  };
 
   useEffect(() => {
     dispatch(getAllQuestions());
@@ -50,8 +69,8 @@ const NewQuestions: React.FC = () => {
         onProceed={() => navigate('/')}
         onClose={() => setShowSuccessDialog(false)}
       />
-      <Grid display={'flex'} px={10} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} height={'100vh'} width={'100%'}>
-        <Paper elevation={3} style={{ width: '50%', padding: '40px' }}>
+      <Grid display={'flex'} sx={{ p: { xs: 5, sm: 8, md: 8, lg: 10 } }} flexDirection={'column'} justifyContent={'center'} alignItems={'center'} height={'100vh'} width={'100%'}>
+        <Paper elevation={3} style={styles.paper}>
           {status === 'pending' ? <Grid container justifyContent="center" alignItems="center">
             <Grid item>
               <CircularProgress size={64} disableShrink thickness={3} />
