@@ -29,6 +29,12 @@ const NewQuestions: React.FC = () => {
       ? '80%' // Width for medium screens
       : '80%'; // Default width for larger screens
 
+  const fontSize = isSmallScreen
+    ? '22px' // Font size for small screens
+    : isMediumScreen
+      ? '26px' // Font size for medium screens
+      : '30px'; // Default font size for larger screens
+
   const styles = {
     paper: {
       width: paperWidth,
@@ -89,7 +95,7 @@ const NewQuestions: React.FC = () => {
                     <Typography align='center' fontWeight={'600'} color={'primary'}>
                       Question {index + 1}/{systemQuestions.length}
                     </Typography>
-                    <Typography textAlign={'center'} variant='h1'>{question.question_title}</Typography>
+                    <Typography style={{ fontSize }} textAlign={'center'} variant='h1'>{question.question_title}</Typography>
                     <br />
                     <br />
                     <RadioGroup
