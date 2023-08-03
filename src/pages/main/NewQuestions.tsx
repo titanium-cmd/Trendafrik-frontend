@@ -32,7 +32,6 @@ const NewQuestions: React.FC = () => {
   const styles = {
     paper: {
       width: paperWidth,
-      padding: 20,
       margin: '0 auto', // Centers the paper horizontally
     },
   };
